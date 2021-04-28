@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Toukou;
+use App\Models\Follow;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,14 +19,45 @@ class TwitterController extends Controller
     {
 //        $myUserId = Auth::id();
         $myUserId = 1;
+        $followIdArray = array();
+        array_push($followIdArray,$myUserId);
         $toukou = new Toukou();
-        $toukouData = $toukou
-            ->join('users', 'toukou.userId', '=', 'users.id')
-            ->where('userId', $myUserId)
-            ->orderBy('hi', 'desc')
+        $follow = new Follow();
+
+        $followId = $follow
+            ->select('followUserId')
+            ->where('myUserId', $myUserId)
             ->get();
 
-        return response()->json(['toukouData' => $toukouData]);
+        foreach ($followId as $follow){
+            array_push($followIdArray,$follow->followUserId);
+        }
+
+        //返信ではないツイート
+        $originalToukouList = $toukou
+            ->join('users', 'toukou.userId', '=', 'users.id')
+            ->whereIn('userId',$followIdArray)
+            ->whereNull('originalToukouId')
+            ->get();
+
+        //返信
+        $replyList = $toukou
+            ->join('users', 'toukou.userId', '=', 'users.id')
+            ->whereNotNull('originalToukouId')
+            ->get();
+
+        foreach ($replyList as $reply){
+            foreach ($originalToukouList as $originalToukou){
+                if($reply->originalToukouId == $originalToukou->toukouId){
+                    $originalToukou->replyName = $reply->name;
+                    $originalToukou->replyHi = $reply->hi;
+                    $originalToukou->replyContents = $reply->contents;
+                    $originalToukou->replyToukouId = $reply->toukouId;
+                }
+            }
+        }
+
+        return response()->json(['toukouData' => $originalToukouList]);
     }
 
     /**

@@ -34,6 +34,9 @@
                     success : function(json) {
                         json.toukouData.forEach(function(data){
                             $(".toukouList").append( '<div class="toukou"><div>' +data.name+ '(' +data.hi+ ')</div><div>' +data.contents+ '</div><div><button type="button" class="replybtn" value=' +data.toukouId+ '>返信</button></div></div>')
+                            if(data.replyName) {
+                                $(".toukouList").append('<div class="reply"><div>' + data.replyName + '(' + data.replyHi + ')</div><div>' + data.replyContents + '</div><div><button type="button" class="replybtn" value=' + data.replyToukouId + '>返信</button></div></div>')
+                            }
                         });
                     },
                     error: function() {

@@ -12,6 +12,17 @@
     background-color: aliceblue;
 }
 
+.toukou{
+    border-bottom: solid 2px #0000ff;
+    margin-bottom: 2%;
+}
+
+.reply{
+    border-bottom: solid 2px #e3342f;
+    margin-bottom: 2%;
+    margin-left: 20px;
+}
+
 h1 {
 
     background: #e02a65;
@@ -174,11 +185,6 @@ a{
 .page{
 
     text-align: center;
-}
-
-.toukou{
-    border-bottom: solid 2px #0000ff;
-    margin-bottom: 2%;
 }
 
 @media screen and (max-width: 767px) {
