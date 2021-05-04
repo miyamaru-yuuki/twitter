@@ -26,7 +26,7 @@
 
             function showToukou(){
                 $.ajax({
-                    url     : "/api/twitter/",
+                    url     : "/api/twitter",
                     type    : "GET",
                     async   : true,
                     data    : null,

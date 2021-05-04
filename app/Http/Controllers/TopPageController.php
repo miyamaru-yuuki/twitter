@@ -6,7 +6,10 @@ use App\Models\Toukou;
 use App\Models\User2;
 use App\Models\Follow;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+
+session_start();
+session_regenerate_id(true);
+setcookie(session_name(),session_id(),time()+60*60*24*3);
 
 class TopPageController extends Controller
 {
@@ -16,10 +19,28 @@ class TopPageController extends Controller
         $toukou = new Toukou();
         $user = new User2();
         $follow = new Follow();
-        $myUserId = Auth::id();
         $search = "";
-        $name = Auth::user()->name;
         $followId = array();
+
+        if($request->isMethod('post')){
+            $_SESSION['address'] = $request->input('address');
+            $_SESSION['password'] = sha1($request->input('password'));
+        }
+
+        if(isset($_SESSION['address'],$_SESSION['password'])){
+            $address = $_SESSION['address'];
+            $password = $_SESSION['password'];
+
+            //ログイン処理
+            $loginUser = $user
+                ->where('email', $address)
+                ->where('password', $password)
+                ->get();
+            $myUserId = $loginUser[0]->id;
+            $name = $loginUser[0]->name;
+        }else{
+            return view('login');
+        }
 
         if($request->isMethod('get')){
             $search = $request->query('search');
@@ -70,12 +91,6 @@ class TopPageController extends Controller
         foreach ($followList as $follow){
             array_push($followId,$follow->followUserId);
         }
-
-//        $toukouList = $toukou
-//            ->join('users', 'toukou.userId', '=', 'users.id')
-//            ->where('userId', $myUserId)
-//            ->orderBy('hi', 'desc')
-//            ->get();
 
         return view('index', ['postcontents' => $postcontents,'userList' => $userList,'search' => $search,'name' => $name]);
     }

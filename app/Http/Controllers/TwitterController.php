@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Toukou;
 use App\Models\Follow;
+use App\Models\User2;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+
+session_start();
+session_regenerate_id(true);
+setcookie(session_name(),session_id(),time()+60*60*24*3);
 
 class TwitterController extends Controller
 {
@@ -17,45 +21,59 @@ class TwitterController extends Controller
      */
     public function index()
     {
-//        $myUserId = Auth::id();
-        $myUserId = 1;
-        $followIdArray = array();
-        array_push($followIdArray,$myUserId);
-        $toukou = new Toukou();
-        $follow = new Follow();
+        $user = new User2();
 
-        $followId = $follow
-            ->select('followUserId')
-            ->where('myUserId', $myUserId)
-            ->get();
+        if(isset($_SESSION['address'],$_SESSION['password'])){
+            $address = $_SESSION['address'];
+            $password = $_SESSION['password'];
 
-        foreach ($followId as $follow){
-            array_push($followIdArray,$follow->followUserId);
-        }
+            //ログイン処理
+            $loginUser = $user
+                ->where('email', $address)
+                ->where('password', $password)
+                ->get();
+            $myUserId = $loginUser[0]->id;
+            $followIdArray = array();
+            array_push($followIdArray,$myUserId);
+            $toukou = new Toukou();
+            $follow = new Follow();
 
-        //返信ではないツイート
-        $originalToukouList = $toukou
-            ->join('users', 'toukou.userId', '=', 'users.id')
-            ->whereIn('userId',$followIdArray)
-            ->whereNull('originalToukouId')
-            ->get();
+            $followId = $follow
+                ->select('followUserId')
+                ->where('myUserId', $myUserId)
+                ->get();
 
-        //返信
-        $replyList = $toukou
-            ->join('users', 'toukou.userId', '=', 'users.id')
-            ->whereNotNull('originalToukouId')
-            ->get();
+            foreach ($followId as $follow){
+                array_push($followIdArray,$follow->followUserId);
+            }
 
-        foreach ($replyList as $reply){
-            foreach ($originalToukouList as $originalToukou){
-                if($reply->originalToukouId == $originalToukou->toukouId){
-                    $originalToukou->replyName = $reply->name;
-                    $originalToukou->replyHi = $reply->hi;
-                    $originalToukou->replyContents = $reply->contents;
-                    $originalToukou->replyToukouId = $reply->toukouId;
+            //返信ではないツイート
+            $originalToukouList = $toukou
+                ->join('users', 'toukou.userId', '=', 'users.id')
+                ->whereIn('userId',$followIdArray)
+                ->whereNull('originalToukouId')
+                ->get();
+
+            //返信
+            $replyList = $toukou
+                ->join('users', 'toukou.userId', '=', 'users.id')
+                ->whereNotNull('originalToukouId')
+                ->get();
+
+            foreach ($replyList as $reply){
+                foreach ($originalToukouList as $originalToukou){
+                    if($reply->originalToukouId == $originalToukou->toukouId){
+                        $originalToukou->replyName = $reply->name;
+                        $originalToukou->replyHi = $reply->hi;
+                        $originalToukou->replyContents = $reply->contents;
+                        $originalToukou->replyToukouId = $reply->toukouId;
+                    }
                 }
             }
+            $originalToukouList = true;
         }
+
+        $originalToukouList = false;
 
         return response()->json(['toukouData' => $originalToukouList]);
     }
