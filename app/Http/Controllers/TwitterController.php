@@ -5,12 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Toukou;
 use App\Models\Follow;
-use App\Models\User2;
 use Carbon\Carbon;
-
-session_start();
-session_regenerate_id(true);
-setcookie(session_name(),session_id(),time()+60*60*24*3);
+use Illuminate\Support\Facades\Session;
 
 class TwitterController extends Controller
 {
@@ -21,18 +17,11 @@ class TwitterController extends Controller
      */
     public function index()
     {
-        $user = new User2();
+        // セッションIDの再発行
+        Session::regenerate();
 
-        if(isset($_SESSION['address'],$_SESSION['password'])){
-            $address = $_SESSION['address'];
-            $password = $_SESSION['password'];
-
-            //ログイン処理
-            $loginUser = $user
-                ->where('email', $address)
-                ->where('password', $password)
-                ->get();
-            $myUserId = $loginUser[0]->id;
+        if(Session::has('id')){
+            $myUserId = session('id');
             $followIdArray = array();
             array_push($followIdArray,$myUserId);
             $toukou = new Toukou();
@@ -70,12 +59,10 @@ class TwitterController extends Controller
                     }
                 }
             }
-            $originalToukouList = true;
+            return response()->json(['toukouData' => $originalToukouList]);
+        }else{
+            return response()->json(['ret' => false]);
         }
-
-        $originalToukouList = false;
-
-        return response()->json(['toukouData' => $originalToukouList]);
     }
 
     /**

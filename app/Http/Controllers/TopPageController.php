@@ -7,10 +7,6 @@ use App\Models\User2;
 use App\Models\Follow;
 use Carbon\Carbon;
 
-session_start();
-session_regenerate_id(true);
-setcookie(session_name(),session_id(),time()+60*60*24*3);
-
 class TopPageController extends Controller
 {
     public function index(Request $request)
@@ -22,24 +18,30 @@ class TopPageController extends Controller
         $search = "";
         $followId = array();
 
+        // セッションIDの再発行
+        $request->session()->regenerate();
+
         if($request->isMethod('post')){
-            $_SESSION['address'] = $request->input('address');
-            $_SESSION['password'] = sha1($request->input('password'));
-        }
+            $address = $request->input('address');
+            $password = sha1($request->input('password'));
 
-        if(isset($_SESSION['address'],$_SESSION['password'])){
-            $address = $_SESSION['address'];
-            $password = $_SESSION['password'];
-
-            //ログイン処理
+            // ログイン処理
             $loginUser = $user
                 ->where('email', $address)
                 ->where('password', $password)
                 ->get();
-            $myUserId = $loginUser[0]->id;
-            $name = $loginUser[0]->name;
-        }else{
-            return view('login');
+
+            if($loginUser[0]->id){
+                //ログイン成功
+                $myUserId = $loginUser[0]->id;
+                $name = $loginUser[0]->name;
+
+                // ユーザーIDをセッションへ保存する
+                session(['id' => $myUserId]);
+            }else{
+                //ログイン失敗
+                return view('login');
+            }
         }
 
         if($request->isMethod('get')){

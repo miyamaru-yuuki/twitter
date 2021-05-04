@@ -32,6 +32,10 @@
                     data    : null,
                     dataType: "json",
                     success : function(json) {
+                        if(json.ret){
+                        }else{
+                            alert(1);
+                        }
                         json.toukouData.forEach(function(data){
                             $(".toukouList").append( '<div class="toukou"><div>' +data.name+ '(' +data.hi+ ')</div><div>' +data.contents+ '</div><div><button type="button" class="replybtn" value=' +data.toukouId+ '>返信</button></div></div>')
                             if(data.replyName) {
@@ -40,7 +44,7 @@
                         });
                     },
                     error: function() {
-                        alertError()
+                        alertError();
                     }
                 });
             }
