@@ -108,5 +108,11 @@
     </form>
 @endforeach
 
+<form action="/top" method="post">
+    @csrf
+    <input type="hidden" name="userId" value="1">
+    <div><span>宮丸</span><span><input type="submit" value="テスト"></span><span>テスト</span></div>
+</form>
+
 </body>
 </html>

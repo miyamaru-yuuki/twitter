@@ -22,25 +22,28 @@ class TopPageController extends Controller
         $request->session()->regenerate();
 
         if($request->isMethod('post')){
-            $address = $request->input('address');
-            $password = sha1($request->input('password'));
+//            dd(1);
+            if($request->input('address') && $request->input('password')) {
+                $address = $request->input('address');
+                $password = sha1($request->input('password'));
 
-            // ログイン処理
-            $loginUser = $user
-                ->where('email', $address)
-                ->where('password', $password)
-                ->get();
+                // ログイン処理
+                $loginUser = $user
+                    ->where('email', $address)
+                    ->where('password', $password)
+                    ->get();
 
-            if($loginUser[0]->id){
-                //ログイン成功
-                $myUserId = $loginUser[0]->id;
-                $name = $loginUser[0]->name;
+                if ($loginUser[0]->id) {
+                    //ログイン成功
+                    $myUserId = $loginUser[0]->id;
+                    $name = $loginUser[0]->name;
 
-                // ユーザーIDをセッションへ保存する
-                session(['id' => $myUserId]);
-            }else{
-                //ログイン失敗
-                return view('login');
+                    // ユーザーIDをセッションへ保存する
+                    session(['id' => $myUserId]);
+                } else {
+                    //ログイン失敗
+                    return view('login');
+                }
             }
         }
 
@@ -52,16 +55,16 @@ class TopPageController extends Controller
             if($request->input('userId')){
                 $userId = $request->input('userId');
                 $hantei = $follow
-                    ->where('myUserId', $myUserId)
+                    ->where('myUserId', session('id'))
                     ->where('followUserId', $userId)
                     ->get();
                 if(isset($hantei[0])){
                     $follow
-                        ->where('myUserId', $myUserId)
+                        ->where('myUserId', session('id'))
                         ->where('followUserId', $hantei[0]['followUserId'])
                         ->delete();
                 }else{
-                    $follow->create(['myUserId' => $myUserId,'followUserId' => $userId]);
+                    $follow->create(['myUserId' => session('id'),'followUserId' => $userId]);
                 }
             }else{
                 $postcontents = $request->input('postcontents');
@@ -71,11 +74,11 @@ class TopPageController extends Controller
         };
 
         $followList = $follow
-            ->where('myUserId', $myUserId)
+            ->where('myUserId', session('id'))
             ->get();
 
         $userList = $user
-            ->whereNotIn('id',[$myUserId])
+            ->whereNotIn('id',[session('id')])
             ->where('name', 'like', "%$search%")
             ->get();
 
