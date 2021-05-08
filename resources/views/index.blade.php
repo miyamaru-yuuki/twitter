@@ -8,8 +8,9 @@
             showToukou();
 
             $(document).on("click",".replybtn",function(){
-                var mototoukouId = $(this).val();
-                $('#mototoukouId').val(mototoukouId);
+                var toukouId = $(this).val();
+                //toukouテーブルのデータを取得するAPI通信
+                getToukou(toukouId);
                 $('#nyuuryoku').show();
             });
 
@@ -64,6 +65,27 @@
                 });
             }
 
+            function getToukou(toukouId){
+                $.ajax({
+                    url     : "/api/twitter/" +toukouId,
+                    type    : "GET",
+                    async   : true,
+                    data    : null,
+                    dataType: "json",
+                    success : function(json) {
+                        json.toukouList.forEach(function(data) {
+                            $('#mototoukouId').val(data.toukouId);
+                            $('.name').text(data.name);
+                            $('#hi').text('(' +data.hi+ ')');
+                            $('#contents').text(data.contents);
+                        });
+                    },
+                    error: function() {
+                        alertError()
+                    }
+                });
+            }
+
             function alertError(){
                 alert('http通信に失敗しました');
             }
@@ -86,8 +108,8 @@
 </div>
 
 <div id="nyuuryoku">
-    <div>前田(2021/01/08 13:00:00)<br>今日誰か飲みに行きませんか？</div>
-    <div>宮丸の返信</div>
+    <div><span class="name"></span><span id="hi"></span><br><span id="contents"></span></div>
+    <div>{{$name}}の返信</div>
     <textarea rows="10" cols="60" id="replycontent"></textarea>
     <input type="hidden" value="" id="mototoukouId">
     <button type="button" id="ok">OK</button>
@@ -107,12 +129,6 @@
         <div><span>{{$user->name}}</span><span><input type="submit" value="{{$user->val}}"></span><span>{{$user->status}}</span></div>
     </form>
 @endforeach
-
-<form action="/top" method="post">
-    @csrf
-    <input type="hidden" name="userId" value="1">
-    <div><span>宮丸</span><span><input type="submit" value="テスト"></span><span>テスト</span></div>
-</form>
 
 </body>
 </html>

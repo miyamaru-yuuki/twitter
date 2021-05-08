@@ -32,12 +32,6 @@
                         @yield('message')
                     </div>
                 </div>
-                <!-- このブロックを追加 -->
-                <div class="flex items-center pt-8 sm:justify-start sm:pt-0">
-                    <div class="px-4 text-lg text-gray-500 border-gray-400 tracking-wider">
-                        <a href="{{ url('/') }}">ログイン</a>
-                    </div>
-                </div>
             </div>
         </div>
     </body>

@@ -22,7 +22,6 @@ class TopPageController extends Controller
         $request->session()->regenerate();
 
         if($request->isMethod('post')){
-//            dd(1);
             if($request->input('address') && $request->input('password')) {
                 $address = $request->input('address');
                 $password = sha1($request->input('password'));
@@ -36,8 +35,6 @@ class TopPageController extends Controller
                 if ($loginUser[0]->id) {
                     //ログイン成功
                     $myUserId = $loginUser[0]->id;
-                    $name = $loginUser[0]->name;
-
                     // ユーザーIDをセッションへ保存する
                     session(['id' => $myUserId]);
                 } else {
@@ -46,6 +43,12 @@ class TopPageController extends Controller
                 }
             }
         }
+
+        $name = $user
+            ->select('name')
+            ->where('id', session('id'))
+            ->get();
+        $name = $name[0]['name'];
 
         if($request->isMethod('get')){
             $search = $request->query('search');
@@ -66,10 +69,11 @@ class TopPageController extends Controller
                 }else{
                     $follow->create(['myUserId' => session('id'),'followUserId' => $userId]);
                 }
-            }else{
+            }
+            if($request->input('postcontents')){
                 $postcontents = $request->input('postcontents');
                 $hi = Carbon::now();
-                $toukou->create(['userId' => 1,'originalToukouId' => NULL,'contents' => $postcontents,'hi' => $hi]);
+                $toukou->create(['userId' => session('id'),'originalToukouId' => NULL,'contents' => $postcontents,'hi' => $hi]);
             }
         };
 

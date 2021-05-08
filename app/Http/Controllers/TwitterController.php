@@ -17,9 +17,6 @@ class TwitterController extends Controller
      */
     public function index()
     {
-        // セッションIDの再発行
-        Session::regenerate();
-
         if(Session::has('id')){
             $myUserId = session('id');
             $followIdArray = array();
@@ -85,9 +82,10 @@ class TwitterController extends Controller
         $mototoukouId= $request->input('mototoukouId');
 
         if($replycontent){
+            $myUserId = session('id');
             $hi = Carbon::now();
             $toukou = new Toukou();
-            $toukou->create(['userId' => 1,'originalToukouId' => $mototoukouId,'contents' => $replycontent,'hi' => $hi]);
+            $toukou->create(['userId' => $myUserId,'originalToukouId' => $mototoukouId,'contents' => $replycontent,'hi' => $hi]);
             $ret = true;
         }else{
             $ret = false;
@@ -102,9 +100,14 @@ class TwitterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($toukouId)
     {
-        //
+        $toukou = new Toukou();
+        $toukouList = $toukou
+            ->join('users', 'toukou.userId', '=', 'users.id')
+            ->where('toukouId',$toukouId)
+            ->get();
+        return response()->json(['toukouList' => $toukouList]);
     }
 
     /**
