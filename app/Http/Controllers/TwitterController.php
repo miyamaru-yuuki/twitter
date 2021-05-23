@@ -16,7 +16,8 @@ class TwitterController extends Controller
      */
     public function index()
     {
-//        $myUserId = Auth::id();
+        $myUserId = Auth::id();
+        dd($myUserId);
         $myUserId = 1;
         $toukou = new Toukou();
         $toukouData = $toukou

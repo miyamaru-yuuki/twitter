@@ -24,12 +24,26 @@
                 reply(params);
             });
 
+            function generate_token(length){
+                //edit the token allowed characters
+                var a = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split("");
+                var b = [];
+                for (var i=0; i<length; i++) {
+                    var j = (Math.random() * (a.length-1)).toFixed(0);
+                    b[i] = a[j];
+                }
+                return b.join("");
+            }
+
             function showToukou(){
+                var api_token = generate_token(80);
                 $.ajax({
                     url     : "/api/twitter/",
                     type    : "GET",
                     async   : true,
-                    data    : null,
+                    data:{
+                        api_token:api_token
+                    },
                     dataType: "json",
                     success : function(json) {
                         json.toukouData.forEach(function(data){

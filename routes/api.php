@@ -17,5 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::resource('twitter','App\Http\Controllers\TwitterController');
+Route::middleware('auth:api')->group(function () {
+    Route::resource('twitter','App\Http\Controllers\TwitterController');
+});
 Auth::routes();
