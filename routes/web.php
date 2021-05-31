@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome8');
+    return view('welcome7');
 });
 Route::get('top', 'App\Http\Controllers\TopPageController@index');
 Route::post('top', 'App\Http\Controllers\TopPageController@index');
