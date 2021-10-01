@@ -1,12 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('welcome9');
+    return view('welcome');
 });
 Route::get('top', 'App\Http\Controllers\TopPageController@index');
 Route::post('top', 'App\Http\Controllers\TopPageController@index');
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

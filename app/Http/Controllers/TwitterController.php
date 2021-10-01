@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User2;
 use App\Models\Toukou;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class TwitterController extends Controller
 {
@@ -103,5 +105,18 @@ class TwitterController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function login(Request $request)
+    {
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $user = new User2();
+        $user_data = $user
+            ->where("email","=",$email)
+            ->where("password","=",$password)
+            ->get();
+//        $token = $user_data->api_token;
+        return response()->json(['result' => $user_data]);
     }
 }
