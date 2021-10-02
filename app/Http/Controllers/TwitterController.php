@@ -109,11 +109,10 @@ class TwitterController extends Controller
 
     public function login(Request $request)
     {
-        $email = $request->input('email');
-        $password = $request->input('password');
+//        $email = $request->input('email');
+        $password = Hash::make($request->input('password'));
         $user = new User2();
         $user_data = $user
-            ->where("email","=",$email)
             ->where("password","=",$password)
             ->get();
 //        $token = $user_data->api_token;
