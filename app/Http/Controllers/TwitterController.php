@@ -109,13 +109,22 @@ class TwitterController extends Controller
 
     public function login(Request $request)
     {
-//        $email = $request->input('email');
-        $password = Hash::make($request->input('password'));
+        $email = $request->input('email');
+        $password = $request->input('password');
         $user = new User2();
         $user_data = $user
-            ->where("password","=",$password)
+            ->where('email','=',$email)
             ->get();
-//        $token = $user_data->api_token;
-        return response()->json(['result' => $user_data]);
+
+        if (Hash::check($password,$user_data[0]->password)) {
+            // パスワードが一致
+            $data = User2::find($user_data[0]->id);
+            $data->api_token = Hash::make($user_data[0]->api_token);
+            $data->save();
+            $ret = $data->api_token;
+        }else{
+            $ret = false;
+        }
+        return response()->json(['ret' => $ret]);
     }
 }

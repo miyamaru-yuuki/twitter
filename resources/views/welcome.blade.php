@@ -187,8 +187,8 @@
                     dataType: "json",
                     success : function(json) {
                         //成功時の処理
-                        if(json.result){
-                            console.log(json.result);
+                        if(json.ret){
+                            console.log(json.ret);
                         }
                     },
                     error: function() {
@@ -196,27 +196,6 @@
                     }
                 });
             });
-            //     var zip = $("*[name=zip]").val();
-            //     $.ajax({
-            //         url     : "https://zipcloud.ibsnet.co.jp/api/search",
-            //         type    : "GET",
-            //         async   : true,
-            //         data    : {"zipcode": zip},
-            //         dataType: "json",
-            //         success : function(json) {
-            //             //成功時の処理
-            //             console.log(json);
-            //             // json.gameData.forEach(function(data){
-            //             //     $("#gname").append( '<tr><td>' +'<a href="' +data.gid +'" class="gname">'+data.gname+ '</a></td><td>' +'<a href="' +data.gid +'" class="del">削除</a></td><td>' +'<a href="' +data.gid +'" class="edit">変更</a></td></tr>')
-            //             // });
-            //         },
-            //         error: function() {
-            //             alertError()
-            //         }
-            //     });
-            //     return false;
-            // });
-
         })
     </script>
 </head>
