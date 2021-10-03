@@ -16,6 +16,7 @@ class TopPageController extends Controller
         $toukou = new Toukou();
         $user = new User2();
         $follow = new Follow();
+
         $myUserId = Auth::id();
         $search = "";
         $name = Auth::user()->name;
@@ -78,5 +79,11 @@ class TopPageController extends Controller
 //            ->get();
 
         return view('index', ['postcontents' => $postcontents,'userList' => $userList,'search' => $search,'name' => $name]);
+    }
+
+    public function getUserInfo($api_token)
+    {
+
+        return response()->json(['ret' => $ret]);
     }
 }

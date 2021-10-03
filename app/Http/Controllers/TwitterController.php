@@ -127,4 +127,5 @@ class TwitterController extends Controller
         }
         return response()->json(['ret' => $ret]);
     }
+
 }
