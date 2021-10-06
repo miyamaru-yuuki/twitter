@@ -36,15 +36,14 @@
             }
 
             function showToukou(){
-                var api_token = generate_token(80);
                 $.ajax({
                     url     : "/api/twitter/",
+                    headers: {
+                        'Accept' : 'application/json',
+                    },
                     type    : "GET",
                     async   : true,
-                    data:{
-                        api_token:api_token
-                    },
-                    dataType: "json",
+                    data:{"api_token":localStorage.getItem('api_token')},
                     success : function(json) {
                         json.toukouData.forEach(function(data){
                             $(".toukouList").append( '<div class="toukou"><div>' +data.name+ '(' +data.hi+ ')</div><div>' +data.contents+ '</div><div><button type="button" class="replybtn" value=' +data.toukouId+ '>返信</button></div></div>')

@@ -25,7 +25,8 @@
                         //成功時の処理
                         if(json.ret){
                             localStorage.setItem('api_token', json.ret);
-                            window.location.href = "{{ route('top.index')}}";
+                            // console.log(localStorage.getItem('api_token'));
+                            window.location.href ="{{ route('top.index') }}?api_token=" + localStorage.getItem('api_token');
                         }
                     },
                     error: function() {

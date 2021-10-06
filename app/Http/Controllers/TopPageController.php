@@ -17,9 +17,17 @@ class TopPageController extends Controller
         $user = new User2();
         $follow = new Follow();
 
-        $myUserId = Auth::id();
+        if($request->input('api_token')){
+            $api_token = $request->input('api_token');
+        }
+
+        $user_data = $user
+            ->where('api_token','=',$api_token)
+            ->get();
+
+        $myUserId = $user_data[0]->id;
         $search = "";
-        $name = Auth::user()->name;
+        $name = $user_data[0]->name;
         $followId = array();
 
         if($request->isMethod('get')){
@@ -81,9 +89,4 @@ class TopPageController extends Controller
         return view('index', ['postcontents' => $postcontents,'userList' => $userList,'search' => $search,'name' => $name]);
     }
 
-    public function getUserInfo($api_token)
-    {
-
-        return response()->json(['ret' => $ret]);
-    }
 }
