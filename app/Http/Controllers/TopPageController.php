@@ -7,6 +7,7 @@ use App\Models\User2;
 use App\Models\Follow;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class TopPageController extends Controller
 {
@@ -16,18 +17,21 @@ class TopPageController extends Controller
         $toukou = new Toukou();
         $user = new User2();
         $follow = new Follow();
-
-        if($request->input('api_token')){
-            $api_token = $request->input('api_token');
+        $api_token = $request->query('api_token');
+        dd(Hash::make($api_token));
+//        $user_data = $user
+//            ->where('api_token','=',Hash::make($api_token))
+//            ->get()
+//            ->first();
+        if (!Hash::check($api_token,Hash::make($api_token))) {
+            exit();
         }
 
-        $user_data = $user
-            ->where('api_token','=',$api_token)
-            ->get();
-
-        $myUserId = $user_data[0]->id;
+        $user_data = User2::where('api_token', '=', Hash::make($api_token))->get()->first();
+        dd($user_data);
+        $myUserId = $user_data->id;
         $search = "";
-        $name = $user_data[0]->name;
+        $name = $user_data->name;
         $followId = array();
 
         if($request->isMethod('get')){

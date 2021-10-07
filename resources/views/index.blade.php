@@ -38,9 +38,7 @@
             function showToukou(){
                 $.ajax({
                     url     : "/api/twitter/",
-                    headers: {
-                        'Accept' : 'application/json',
-                    },
+                    headers: {'Accept' : 'application/json'},
                     type    : "GET",
                     async   : true,
                     data:{"api_token":localStorage.getItem('api_token')},

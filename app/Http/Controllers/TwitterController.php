@@ -8,12 +8,13 @@ use App\Models\Toukou;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class TwitterController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')
+        $this->middleware('auth:api')
             ->except(['login']);
     }
 
@@ -115,18 +116,15 @@ class TwitterController extends Controller
     {
         $email = $request->input('email');
         $password = $request->input('password');
-        $user = new User2();
-        $user_data = $user
-            ->where('email','=',$email)
-            ->get();
+        $user_data = User2::where('email','=',$email)->get()->first();
 
-        if (Hash::check($password,$user_data[0]->password)) {
+        if (Hash::check($password,$user_data->password)) {
             // パスワードが一致
-            $data = User2::find($user_data[0]->id);
-            $data->api_token = Hash::make($user_data[0]->api_token);
-            $data->save();
-            $ret = $data->api_token;
-        }else{
+            $api_token = Str::random(80);
+            $user_data->api_token = Hash::make($api_token);
+            $user_data->save();
+            $ret = $api_token;
+        } else {
             $ret = false;
         }
         return response()->json(['ret' => $ret]);
