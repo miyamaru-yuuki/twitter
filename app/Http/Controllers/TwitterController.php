@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\User2;
 use App\Models\Toukou;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -21,11 +21,18 @@ class TwitterController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
-        $myUserId = 1;
+        $api_token = $request->query('api_token');
+
+        if (!Hash::check($api_token,Hash::make($api_token))) {
+            exit();
+        }
+
+        $user_data = User2::whereRaw(Hash::check($api_token,Hash::make($api_token)))->get()->first();
+        $myUserId = $user_data->id;
         $toukou = new Toukou();
         $toukouData = $toukou
             ->join('users', 'toukou.userId', '=', 'users.id')
