@@ -80,9 +80,24 @@ class TwitterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        $api_token = $request->query('api_token');
+
+        if (!Hash::check($api_token,Hash::make($api_token))) {
+            exit();
+        }
+
+        $user_data = User2::whereRaw(Hash::check($api_token,Hash::make($api_token)))->get()->first();
+        $myUserId = $user_data->id;
+        $toukou = new Toukou();
+        $toukouData = $toukou
+            ->join('users', 'toukou.userId', '=', 'users.id')
+            ->where('userId', $myUserId)
+            ->orderBy('hi', 'desc')
+            ->get();
+
+        return response()->json(['toukouData' => $toukouData]);
     }
 
     /**
