@@ -18,11 +18,8 @@ class TopPageController extends Controller
         $follow = new Follow();
         $api_token = $request->query('api_token');
 
-        if (!Hash::check($api_token,Hash::make($api_token))) {
-            exit();
-        }
-
-        $user_data = User2::whereRaw(Hash::check($api_token,Hash::make($api_token)))->get()->first();
+//        $user_data = User2::whereRaw(Hash::check($api_token,Hash::make($api_token)))->get()->first();
+        $user_data = User2::where('api_token',"=",hash('sha256', $api_token))->get()->first();
         $myUserId = $user_data->id;
         $search = "";
         $name = $user_data->name;

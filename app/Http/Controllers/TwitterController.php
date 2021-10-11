@@ -143,7 +143,7 @@ class TwitterController extends Controller
         if (Hash::check($password,$user_data->password)) {
             // パスワードが一致
             $api_token = Str::random(80);
-            $user_data->api_token = Hash::make($api_token);
+            $user_data->api_token = hash('sha256', $api_token);
             $user_data->save();
             $ret = $api_token;
         } else {
