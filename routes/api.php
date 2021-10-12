@@ -18,4 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::resource('twitter','App\Http\Controllers\TwitterController');
+Route::resource('toppage','App\Http\Controllers\TopPageController');
 Route::post('login', 'App\Http\Controllers\TwitterController@login');

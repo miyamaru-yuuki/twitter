@@ -37,14 +37,19 @@
 
             function showToukou(){
                 $.ajax({
-                    url     : "/api/twitter",
+                    url     : "/api/toppage",
                     headers: {'Accept' : 'application/json'},
                     type    : "GET",
                     async   : true,
                     data:{"api_token":localStorage.getItem('api_token')},
                     success : function(json) {
+                        $(".userName").append( '<p>ログインユーザー:' +json.name+ '</p>');
+                        $(".search").append( '<input type="text" name="search" value="">');
+                        if(json.search){
+                            $(".search").append( '<input type="text" name="search" value=' +json.search+ '>');
+                        }
                         json.toukouData.forEach(function(data){
-                            $(".toukouList").append( '<div class="toukou"><div>' +data.name+ '(' +data.hi+ ')</div><div>' +data.contents+ '</div><div><button type="button" class="replybtn" value=' +data.toukouId+ '>返信</button></div></div>')
+                            $(".toukouList").append( '<div class="toukou"><div>' +data.name+ '(' +data.hi+ ')</div><div>' +data.contents+ '</div><div><button type="button" class="replybtn" value=' +data.toukouId+ '>返信</button></div></div>');
                         });
                     },
                     error: function() {
@@ -80,7 +85,8 @@
     <title>トップ画面</title>
 </head>
 <body>
-<p>ログインユーザー:{{$name}}</p>
+<div class="userName">
+</div>
 
 <form action="/top" method="post">
     @csrf
@@ -104,17 +110,16 @@
 <h2>他のユーザー</h2>
 
 <h3>ユーザー検索</h3>
-<form action="/top" method="get">
-    <input type="text" name="search" value="{{$search}}">
+<form class="search" action="/top" method="get">
     <input type="submit" value="検索">
 </form>
-@foreach($userList as $user)
-    <form action="/top" method="post">
-        @csrf
-        <input type="hidden" name="userId" value="{{$user->id}}">
-        <div><span>{{$user->name}}</span><span><input type="submit" value="{{$user->val}}"></span><span>{{$user->status}}</span></div>
-    </form>
-@endforeach
+{{--@foreach($userList as $user)--}}
+{{--    <form action="/top" method="post">--}}
+{{--        @csrf--}}
+{{--        <input type="hidden" name="userId" value="{{$user->id}}">--}}
+{{--        <div><span>{{$user->name}}</span><span><input type="submit" value="{{$user->val}}"></span><span>{{$user->status}}</span></div>--}}
+{{--    </form>--}}
+{{--@endforeach--}}
 
 </body>
 </html>

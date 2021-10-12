@@ -1,24 +1,27 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
+
+use App\Models\Follow;
 use App\Models\Toukou;
 use App\Models\User2;
-use App\Models\Follow;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class TopPageController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         $postcontents = '';
-        $toukou = new Toukou();
         $user = new User2();
         $follow = new Follow();
         $api_token = $request->query('api_token');
-
-//        $user_data = User2::whereRaw(Hash::check($api_token,Hash::make($api_token)))->get()->first();
         $user_data = User2::where('api_token',"=",hash('sha256', $api_token))->get()->first();
         $myUserId = $user_data->id;
         $search = "";
@@ -28,28 +31,6 @@ class TopPageController extends Controller
         if($request->isMethod('get')){
             $search = $request->query('search');
         }
-
-        if($request->isMethod('post')){
-            if($request->input('userId')){
-                $userId = $request->input('userId');
-                $hantei = $follow
-                    ->where('myUserId', $myUserId)
-                    ->where('followUserId', $userId)
-                    ->get();
-                if(isset($hantei[0])){
-                    $follow
-                        ->where('myUserId', $myUserId)
-                        ->where('followUserId', $hantei[0]['followUserId'])
-                        ->delete();
-                }else{
-                    $follow->create(['myUserId' => $myUserId,'followUserId' => $userId]);
-                }
-            }else{
-                $postcontents = $request->input('postcontents');
-                $hi = Carbon::now();
-                $toukou->create(['userId' => 1,'originalToukouId' => NULL,'contents' => $postcontents,'hi' => $hi]);
-            }
-        };
 
         $followList = $follow
             ->where('myUserId', $myUserId)
@@ -64,7 +45,7 @@ class TopPageController extends Controller
             $user->status = "";
             $user->val = "フォローする";
             foreach ($followList as $follow){
-               if($user->id == $follow->followUserId){
+                if($user->id == $follow->followUserId){
                     $user->status = "フォロー中";
                     $user->val = "フォローを解除する";
                 }
@@ -75,13 +56,80 @@ class TopPageController extends Controller
             array_push($followId,$follow->followUserId);
         }
 
-//        $toukouList = $toukou
-//            ->join('users', 'toukou.userId', '=', 'users.id')
-//            ->where('userId', $myUserId)
-//            ->orderBy('hi', 'desc')
-//            ->get();
+        $toukou = new Toukou();
+        $toukouData = $toukou
+            ->join('users', 'toukou.userId', '=', 'users.id')
+            ->where('userId', $myUserId)
+            ->orderBy('hi', 'desc')
+            ->get();
 
-        return view('index', ['postcontents' => $postcontents,'userList' => $userList,'search' => $search,'name' => $name]);
+        return response()->json(['postcontents' => $postcontents,'userList' => $userList,'search' => $search,'name' => $name,'toukouData' => $toukouData]);
     }
 
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
 }
