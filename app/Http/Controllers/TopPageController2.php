@@ -8,7 +8,7 @@ use App\Models\Follow;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
-class TopPageController extends Controller
+class TopPageController2 extends Controller
 {
     public function index(Request $request)
     {

@@ -19,7 +19,6 @@ class TopPageController extends Controller
     public function index(Request $request)
     {
         $postcontents = '';
-        $user = new User2();
         $follow = new Follow();
         $api_token = $request->query('api_token');
         $user_data = User2::where('api_token',"=",hash('sha256', $api_token))->get()->first();
@@ -36,8 +35,7 @@ class TopPageController extends Controller
             ->where('myUserId', $myUserId)
             ->get();
 
-        $userList = $user
-            ->whereNotIn('id',[$myUserId])
+        $userList = User2::whereNotIn('id',[$myUserId])
             ->where('name', 'like', "%$search%")
             ->get();
 
@@ -64,6 +62,7 @@ class TopPageController extends Controller
             ->get();
 
         return response()->json(['postcontents' => $postcontents,'userList' => $userList,'search' => $search,'name' => $name,'toukouData' => $toukouData]);
+        //return view('index', ['postcontents' => $postcontents,'userList' => $userList,'search' => $search,'name' => $name]);
     }
 
 
