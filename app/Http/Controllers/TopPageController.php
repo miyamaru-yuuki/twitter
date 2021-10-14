@@ -61,8 +61,8 @@ class TopPageController extends Controller
             ->orderBy('hi', 'desc')
             ->get();
 
-        return response()->json(['postcontents' => $postcontents,'userList' => $userList,'search' => $search,'name' => $name,'toukouData' => $toukouData]);
-        //return view('index', ['postcontents' => $postcontents,'userList' => $userList,'search' => $search,'name' => $name]);
+//        return response()->json(['postcontents' => $postcontents,'userList' => $userList,'search' => $search,'name' => $name,'toukouData' => $toukouData]);
+        return view('index', ['postcontents' => $postcontents,'userList' => $userList,'search' => $search,'name' => $name]);
     }
 
 
