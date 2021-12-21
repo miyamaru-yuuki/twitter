@@ -3,10 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="742a63f1-e5af-4ffd-b36d-723d388b65ae" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/TopPageController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/TopPageController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/TwitterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/TwitterController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/errors/minimal.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/errors/minimal.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/index.blade.php" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/TwitterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/TwitterController.php" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -411,6 +415,7 @@
       <workItem from="1618361717325" duration="102000" />
       <workItem from="1618361843615" duration="546000" />
       <workItem from="1618364644234" duration="10512000" />
+<<<<<<< Updated upstream
       <workItem from="1618476731789" duration="12226000" />
       <workItem from="1619414809458" duration="5563000" />
       <workItem from="1620104116705" duration="11194000" />
@@ -418,6 +423,51 @@
       <workItem from="1620448792225" duration="3344000" />
       <workItem from="1620466248302" duration="8000" />
       <workItem from="1620466267507" duration="2590000" />
+=======
+      <workItem from="1618476731789" duration="3187000" />
+      <workItem from="1621944654473" duration="695000" />
+      <workItem from="1622015160054" duration="8622000" />
+      <workItem from="1622483144087" duration="9162000" />
+      <workItem from="1623476865767" duration="888000" />
+      <workItem from="1623575099144" duration="3734000" />
+      <workItem from="1625644724056" duration="3218000" />
+      <workItem from="1626243563745" duration="1090000" />
+      <workItem from="1626432674351" duration="1376000" />
+      <workItem from="1628386659004" duration="3535000" />
+      <workItem from="1632132482020" duration="13131000" />
+      <workItem from="1632873110517" duration="1175000" />
+      <workItem from="1632893209042" duration="215000" />
+      <workItem from="1632920968925" duration="256000" />
+      <workItem from="1632921276428" duration="40000" />
+      <workItem from="1632921496093" duration="1705000" />
+      <workItem from="1632933837758" duration="337000" />
+      <workItem from="1632934252165" duration="23000" />
+      <workItem from="1632934289000" duration="968000" />
+      <workItem from="1632935325285" duration="319000" />
+      <workItem from="1632935663901" duration="3247000" />
+      <workItem from="1633048735259" duration="6000" />
+      <workItem from="1633048778833" duration="194000" />
+      <workItem from="1633049029987" duration="1046000" />
+      <workItem from="1633051996619" duration="16000" />
+      <workItem from="1633052044821" duration="4341000" />
+      <workItem from="1633141474212" duration="5047000" />
+      <workItem from="1633183743220" duration="2055000" />
+      <workItem from="1633191188556" duration="2944000" />
+      <workItem from="1633241828050" duration="2882000" />
+      <workItem from="1633287807890" duration="4883000" />
+      <workItem from="1633426116460" duration="4524000" />
+      <workItem from="1633473561059" duration="6378000" />
+      <workItem from="1633618369853" duration="2072000" />
+      <workItem from="1633637800295" duration="3435000" />
+      <workItem from="1633720913308" duration="1709000" />
+      <workItem from="1633885771217" duration="15596000" />
+      <workItem from="1634687630265" duration="26000" />
+      <workItem from="1635186863015" duration="507000" />
+      <workItem from="1635575265796" duration="1792000" />
+      <workItem from="1637917589645" duration="2647000" />
+      <workItem from="1638133142743" duration="520000" />
+      <workItem from="1640114255926" duration="70000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
